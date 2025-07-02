@@ -5,7 +5,7 @@ import '../models/movie.dart';
 class MovieService {
   static const String _baseUrl = 'https://api.themoviedb.org/3';
   static const String _apiKey =
-      'YOUR_TMDB_API_KEY'; // Replace with your TMDb API key
+      '413fc743042d3f59547df08915b0f7c0'; // Reemplazado con tu API Key
 
   Future<List<Movie>> getPopularMovies() async {
     final response = await http.get(
@@ -17,7 +17,7 @@ class MovieService {
           .map((json) => Movie.fromJson(json))
           .toList();
     } else {
-      throw Exception('Failed to load popular movies');
+      throw Exception('No se pudieron cargar las películas populares');
     }
   }
 
@@ -31,7 +31,7 @@ class MovieService {
           .map((json) => Movie.fromJson(json))
           .toList();
     } else {
-      throw Exception('Failed to load search results');
+      throw Exception('No se pudieron cargar los resultados de búsqueda');
     }
   }
 
@@ -43,7 +43,7 @@ class MovieService {
       final data = jsonDecode(response.body);
       return Movie.fromJson(data);
     } else {
-      throw Exception('Failed to load movie details');
+      throw Exception('No se pudieron cargar los detalles de la película');
     }
   }
 }

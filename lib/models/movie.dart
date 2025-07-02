@@ -1,28 +1,36 @@
+import 'dart:convert';
+
 class Movie {
   final int id;
   final String title;
   final String overview;
-  final String? posterPath;
+  final String releaseDate;
   final double voteAverage;
-  final String? releaseDate;
+  final String posterPath;
+  final String backdropPath;
+  final List<int> genreIds;
 
   Movie({
     required this.id,
     required this.title,
     required this.overview,
-    this.posterPath,
+    required this.releaseDate,
     required this.voteAverage,
-    this.releaseDate,
+    required this.posterPath,
+    required this.backdropPath,
+    required this.genreIds,
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
-      id: json['id'] ?? 0,
-      title: json['title'] ?? '',
-      overview: json['overview'] ?? '',
-      posterPath: json['poster_path'],
-      voteAverage: (json['vote_average'] ?? 0.0).toDouble(),
+      id: json['id'],
+      title: json['title'],
+      overview: json['overview'],
       releaseDate: json['release_date'],
+      voteAverage: (json['vote_average'] as num).toDouble(),
+      posterPath: json['poster_path'] ?? '',
+      backdropPath: json['backdrop_path'] ?? '',
+      genreIds: List<int>.from(json['genre_ids'] ?? []),
     );
   }
 
@@ -31,9 +39,11 @@ class Movie {
       'id': id,
       'title': title,
       'overview': overview,
-      'poster_path': posterPath,
-      'vote_average': voteAverage,
       'release_date': releaseDate,
+      'vote_average': voteAverage,
+      'poster_path': posterPath,
+      'backdrop_path': backdropPath,
+      'genre_ids': genreIds,
     };
   }
 }

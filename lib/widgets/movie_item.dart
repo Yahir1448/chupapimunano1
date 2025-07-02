@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../models/movie.dart';
-import '../screens/details_screen.dart';
 
 class MovieItem extends StatelessWidget {
   final Movie movie;
@@ -10,30 +8,32 @@ class MovieItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: ListTile(
-        leading: movie.posterPath != null
-            ? CachedNetworkImage(
-                imageUrl: 'https://image.tmdb.org/t/p/w200${movie.posterPath}',
-                width: 50,
-                height: 75,
-                fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              )
-            : const Icon(Icons.movie, size: 50),
-        title: Text(movie.title),
-        subtitle: Text('Rating: ${movie.voteAverage.toStringAsFixed(1)}'),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailsScreen(movie: movie),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.black.withOpacity(0.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Image.network(
+              'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.error),
             ),
-          );
-        },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Text(
+              movie.title,
+              style: const TextStyle(color: Colors.white, fontSize: 14),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }
