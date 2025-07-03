@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/movie.dart';
 import '../screens/login.dart';
+import '../widgets/app_drawer.dart';
+import '../widgets/custom_app_bar.dart';
 
 class DetailsScreen extends StatelessWidget {
   final Movie movie;
@@ -21,65 +23,8 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // Fondo cubre toda la pantalla
-      extendBody: true, // Asegura que el fondo cubra la parte inferior
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF1A2A6C),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: Colors.white),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
-          ),
-        ],
-      ),
-      endDrawer: Drawer(
-        backgroundColor: const Color(0xFF1A2A6C),
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color(0xFF0F1C3D),
-              ),
-              child: Text(
-                'Menú',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.account_circle, color: Colors.white),
-              title:
-                  const Text('Cuenta', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings, color: Colors.white),
-              title: const Text('Configuración',
-                  style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout, color: Colors.white),
-              title: const Text('Cerrar Sesión',
-                  style: TextStyle(color: Colors.white)),
-              onTap: () => _logout(context),
-            ),
-          ],
-        ),
-      ),
+      appBar: const CustomAppBar(title: 'Detalles', onBackPressed: null),
+      endDrawer: const AppDrawer(),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -92,15 +37,13 @@ class DetailsScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Center(
             child: ConstrainedBox(
-              constraints:
-                  const BoxConstraints(maxWidth: 600), // Limita el ancho máximo
+              constraints: const BoxConstraints(maxWidth: 600),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Portada de la película en rectángulo vertical
                   Container(
-                    height: 450, // Altura mayor para un rectángulo vertical
-                    width: 300, // Ancho fijo para un rectángulo
+                    height: 450,
+                    width: 300,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
                       color: Colors.black.withOpacity(0.3),
