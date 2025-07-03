@@ -33,6 +33,15 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
+            if (movieProvider.errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  movieProvider.errorMessage!,
+                  style: const TextStyle(color: Colors.red, fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             Expanded(
               child: movieProvider.isLoading
                   ? const Center(
@@ -56,12 +65,10 @@ class HomeScreen extends StatelessWidget {
                               : movieProvider.popularMovies[index];
                           return GestureDetector(
                             onTap: () {
-                              Navigator.push(
+                              Navigator.pushNamed(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailsScreen(movie: movie),
-                                ),
+                                '/details',
+                                arguments: movie,
                               );
                             },
                             child: MovieItem(movie: movie),

@@ -29,6 +29,99 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  void _showEditProfileDialog() {
+    final emailController = TextEditingController(text: _email);
+    final phoneController = TextEditingController(text: _phone);
+    String? errorMessage;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).cardColor,
+        title:
+            const Text('Editar Perfil', style: TextStyle(color: Colors.white)),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: 'Correo electrónico',
+                  labelStyle: const TextStyle(color: Colors.white70),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.1),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                style: const TextStyle(color: Colors.white),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: phoneController,
+                decoration: InputDecoration(
+                  labelText: 'Número de teléfono',
+                  labelStyle: const TextStyle(color: Colors.white70),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.1),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                style: const TextStyle(color: Colors.white),
+                keyboardType: TextInputType.phone,
+              ),
+              if (errorMessage != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    errorMessage!, // Usamos el operador ! porque ya verificamos que no es null
+                    style: const TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child:
+                const Text('Cancelar', style: TextStyle(color: Colors.white70)),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (emailController.text.isEmpty ||
+                  phoneController.text.isEmpty) {
+                setState(() {
+                  errorMessage = 'Por favor, completa todos los campos';
+                });
+                return;
+              }
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setString('user_email', emailController.text);
+              await prefs.setString('user_phone', phoneController.text);
+              setState(() {
+                _email = emailController.text;
+                _phone = phoneController.text;
+              });
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Perfil actualizado')),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF00A8E8),
+            ),
+            child: const Text('Guardar', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,9 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {
-                        // Lógica para editar perfil (puedes expandirla)
-                      },
+                      onPressed: _showEditProfileDialog,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF00A8E8),
                         shape: RoundedRectangleBorder(

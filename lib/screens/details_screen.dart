@@ -10,20 +10,40 @@ class DetailsScreen extends StatelessWidget {
 
   const DetailsScreen({Key? key, required this.movie}) : super(key: key);
 
-  Future<void> _logout(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('user_email');
-    await prefs.remove('user_password');
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-    );
+  // Mapa de IDs de géneros a nombres (basado en TMDb)
+  static const Map<int, String> genreMap = {
+    28: 'Acción',
+    12: 'Aventura',
+    16: 'Animación',
+    35: 'Comedia',
+    80: 'Crimen',
+    99: 'Documental',
+    18: 'Drama',
+    10751: 'Familiar',
+    14: 'Fantasía',
+    36: 'Historia',
+    27: 'Terror',
+    10402: 'Música',
+    9648: 'Misterio',
+    10749: 'Romance',
+    878: 'Ciencia ficción',
+    10770: 'Película de TV',
+    53: 'Suspenso',
+    10752: 'Guerra',
+    37: 'Western',
+  };
+
+  String _getGenreNames(List<int> genreIds) {
+    return genreIds.map((id) => genreMap[id] ?? 'Desconocido').join(', ');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Detalles', onBackPressed: null),
+      appBar: CustomAppBar(
+        title: movie.title,
+        onBackPressed: () => Navigator.pop(context),
+      ),
       endDrawer: const AppDrawer(),
       body: Container(
         decoration: const BoxDecoration(
@@ -118,14 +138,17 @@ class DetailsScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          'Géneros:',
+                          'Géneros: ',
                           style: TextStyle(color: Colors.white70, fontSize: 16),
                         ),
                         const SizedBox(width: 10),
-                        Text(
-                          movie.genreIds.join(', '),
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 16),
+                        Flexible(
+                          child: Text(
+                            _getGenreNames(movie.genreIds),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ],
                     ),

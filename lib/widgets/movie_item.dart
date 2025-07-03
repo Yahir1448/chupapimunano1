@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/movie.dart';
 
 class MovieItem extends StatelessWidget {
@@ -17,11 +18,12 @@ class MovieItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: Image.network(
-              'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+            child: CachedNetworkImage(
+              imageUrl: 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) =>
-                  const Icon(Icons.error),
+              placeholder: (context, url) =>
+                  const Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
           Padding(
